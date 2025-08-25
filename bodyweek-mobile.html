@@ -29,6 +29,7 @@
     
     <!-- Стильные шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23FF7DC2'/%3E%3Cstop offset='1' stop-color='%23D14E9E'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='url(%23g)'/%3E%3C/svg%3E" />
     
     <style>
         body {
@@ -925,14 +926,14 @@
                     <h3 class="text-lg font-semibold text-text mb-3 text-center">Как ты сегодня?</h3>
                     <div class="flex justify-center space-x-3">
                         <button onclick="startTodayFlow('excellent', event)" class="flex-1 chip">
-                             😀 Отлично
-                         </button>
+                            😀 Отлично
+                        </button>
                         <button onclick="startTodayFlow('ok', event)" class="flex-1 chip">
-                             🙂 Нормально
-                         </button>
+                            🙂 Нормально
+                        </button>
                         <button onclick="startTodayFlow('bad', event)" class="flex-1 chip">
-                             🙁 Не очень
-                         </button>
+                            🙁 Не очень
+                        </button>
                     </div>
                     <div id="today-questions" class="mt-4 hidden"></div>
                     <div id="today-reco" class="mt-3 hidden"></div>
@@ -1015,9 +1016,9 @@
                         <button id="wish-button" onclick="showInlineWish()" class="wish-btn inline-flex items-center justify-center rounded-full w-36 h-36 text-white font-bold text-base shadow-lg transition-all duration-150 active:scale-95">
                              Ткни на меня
                          </button>
-                     </div>
-                 </div>
-             </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Профиль Section -->
@@ -1732,15 +1733,15 @@
             const endAt = Date.now() + durationMs;
             const spawn = () => {
                 if (Date.now() > endAt) return;
-                const heart = document.createElement('div');
-                heart.className = 'heart';
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
                 heart.textContent = '💖';
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
                 heart.style.left = (Math.random() * screenWidth) + 'px';
                 heart.style.top = (-50) + 'px';
                 heart.style.fontSize = (2 + Math.random() * 2) + 'rem';
-                document.body.appendChild(heart);
+                    document.body.appendChild(heart);
                 setTimeout(() => { heart.style.transition = 'top 2s ease-in'; heart.style.top = (screenHeight + 100) + 'px'; }, 20);
                 setTimeout(() => { if (heart.parentNode) heart.parentNode.removeChild(heart); }, 2300);
                 setTimeout(spawn, 100 + Math.random()*120);
