@@ -1170,6 +1170,15 @@
                     }
                 });
                 localStorage.setItem(SESS_KEY, JSON.stringify(kept));
+                // Сохранить активности, привязанные к конкретной дате недели
+                const actMap = getActivitiesMap();
+                dayOrder.forEach((key, idx) => {
+                    const d = new Date(monday);
+                    d.setDate(monday.getDate() + idx);
+                    const dateKey = toYMD(d);
+                    actMap[dateKey] = Array.isArray(dayActivities[key]) ? [...dayActivities[key]] : [];
+                });
+                localStorage.setItem(ACTIVITIES_KEY, JSON.stringify(actMap));
             } catch (e) {
                 console.error('Failed updating sessions', e);
             }
@@ -1189,8 +1198,8 @@
                 Object.assign(dayActivities, JSON.parse(savedActivities));
             }
             
-            // Подтянуть фактические минуты этой недели из sessions
-            loadWeekFromSessions();
+             // Подтянуть фактические минуты этой недели из sessions
+             loadWeekFromSessions();
             // Обновляем отображение для всех дней
             Object.keys(dayTimes).forEach(day => {
                 updateDayDisplay(day);
@@ -1348,6 +1357,8 @@
                 addTime(day);
                 addTime(day); // Добавляем еще 30 минут для полного часа
             }
+            // Сохранить выбранные активности сразу
+            saveData();
         }
 
         // Добавление своей активности из поля в портале
@@ -1933,6 +1944,7 @@
                 const monday = getMondayOfWeek(new Date(currentWeekStart));
                 monday.setHours(0,0,0,0);
                 const sessions = getSessions();
+                const actMap = getActivitiesMap();
                 for (let i = 0; i < 7; i++) {
                     const d = new Date(monday);
                     d.setDate(monday.getDate() + i);
@@ -1941,7 +1953,9 @@
                         .filter(s => s.date === key)
                         .reduce((acc, s) => acc + (Number(s.minutes) || 0), 0);
                     dayTimes[dayOrder[i]] = minutes;
-                    dayActivities[dayOrder[i]] = [];
+                    // Подтянуть активности по дате с безопасным фолбэком на сохранённые dayActivities
+                    const fallback = Array.isArray(dayActivities[dayOrder[i]]) ? [...dayActivities[dayOrder[i]]] : [];
+                    dayActivities[dayOrder[i]] = Array.isArray(actMap[key]) ? [...actMap[key]] : fallback;
                 }
             } catch (e) {
                 console.error('loadWeekFromSessions failed', e);
@@ -2515,6 +2529,17 @@
             if (m) m.classList.add('hidden');
             document.body.style.overflow = '';
         }
+
+        // Карта активностей по датам
+        function getActivitiesMap() {
+            try { return JSON.parse(localStorage.getItem(ACTIVITIES_KEY)) || {}; }
+            catch { return {}; }
+        }
+
+        // Автосохранение перед закрытием страницы
+        window.addEventListener('beforeunload', () => {
+            try { saveData(); } catch(e) {}
+        });
     </script>
 
     <!-- Privacy Policy Modal -->
